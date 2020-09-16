@@ -10,14 +10,14 @@ import (
 )
 
 // BindKey 默认绑定键密钥.
-const BindKey = "_lierbai/gweb/bindkey"
+const BindKey = "_lierbai/web/bindkey"
 
 // Bind 用于封装给定接口对象的帮助函数,并返回中间件 .
 func Bind(val interface{}) HandlerFunc {
 	value := reflect.ValueOf(val)
 	if value.Kind() == reflect.Ptr {
 		panic(`绑定的类型不能是指针. 例如:
-	用gweb.Bind(Struct{}) 而不是 gweb.Bind(&Struct{})
+	用web.Bind(Struct{}) 而不是 web.Bind(&Struct{})
 `)
 	}
 	typ := value.Type()

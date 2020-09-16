@@ -7,7 +7,7 @@ import (
 	"github.com/lierbai/web/binding"
 )
 
-// EnvWebMode 表示gweb的环境名称.
+// EnvWebMode 表示web的环境名称.
 const EnvWebMode = "WEB_MODE"
 
 const (

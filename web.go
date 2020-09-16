@@ -2,12 +2,12 @@ package web
 
 import (
 	"fmt"
+	"html/template"
 	"net"
 	"net/http"
 	"os"
 	"path"
 	"sync"
-	"text/template"
 
 	"github.com/lierbai/web/internal/bytesconv"
 	"github.com/lierbai/web/render"
@@ -24,6 +24,7 @@ var (
 // Centre 中枢
 type Centre struct {
 	Boarder
+	AppCentre              bool              //
 	RedirectTrailingSlash  bool              // 反斜杠结尾路径自动重定向
 	HandleMethodNotAllowed bool              // 请求体内部转递
 	ForwardedByClientIP    bool              // 转发连接IP
@@ -57,6 +58,7 @@ func New() *Centre {
 		UseRawPath:             false,
 		UnescapePathValues:     true,
 		RemoveExtraSlash:       false,
+		AppCentre:              defaultAppCentre,
 		MaxMultipartMemory:     defaultMultipartMemory, // 32 MB
 		delims:                 render.Delims{Left: "{{", Right: "}}"},
 		FuncMap:                template.FuncMap{},
@@ -93,7 +95,7 @@ func (centre *Centre) LoadHTMLGlob(pattern string) {
 
 	if IsDebugging() {
 		debugPrintLoadTemplate(templ)
-		centre.HTMLRender = render.HTMLDebug{Glob: pattern, Delims: centre.delims, FuncMap: centre.FuncMap}
+		centre.HTMLRender = render.HTMLDebug{Glob: pattern, FuncMap: centre.FuncMap, Delims: centre.delims}
 		return
 	}
 	centre.SetHTMLTemplate(templ)
@@ -102,7 +104,7 @@ func (centre *Centre) LoadHTMLGlob(pattern string) {
 // LoadHTMLFiles 加载HTML文件片段并将结果与HTML呈现器关联
 func (centre *Centre) LoadHTMLFiles(files ...string) {
 	if IsDebugging() {
-		centre.HTMLRender = render.HTMLDebug{Files: files, Delims: centre.delims, FuncMap: centre.FuncMap}
+		centre.HTMLRender = render.HTMLDebug{Files: files, FuncMap: centre.FuncMap, Delims: centre.delims}
 		return
 	}
 	templ := template.Must(template.New("").Delims(centre.delims.Left, centre.delims.Right).Funcs(centre.FuncMap).ParseFiles(files...))

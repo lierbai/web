@@ -29,7 +29,7 @@ const (
 	MIMEMultipartPOSTForm = binding.MIMEMultipartPOSTForm
 	MIMEXML               = binding.MIMEXML
 	MIMEXML2              = binding.MIMEXML2
-	BodyBytesKey          = "_lierbai/gweb/bodybyteskey"
+	BodyBytesKey          = "_lierbai/web/bodybyteskey"
 )
 const abortIndex int8 = math.MaxInt8 / 2
 
@@ -598,11 +598,11 @@ func (c *Context) ClientIP() string {
 		}
 	}
 
-	// if c.centre.AppEngine {
-	// 	if addr := c.requestHeader("X-Appengine-Remote-Addr"); addr != "" {
-	// 		return addr
-	// 	}
-	// }
+	if c.centre.AppCentre {
+		if addr := c.requestHeader("X-Appengine-Remote-Addr"); addr != "" {
+			return addr
+		}
+	}
 
 	if ip, _, err := net.SplitHostPort(strings.TrimSpace(c.Request.RemoteAddr)); err == nil {
 		return ip
@@ -728,7 +728,7 @@ func (c *Context) HTML(code int, name string, obj interface{}) {
 // (随手设置了Content-Type).
 // 警告: 该方法虽然可读性高,但会比JSON()消耗更多资源,所以建议只在开发中使用.
 func (c *Context) IndentedJSON(code int, obj interface{}) {
-	c.Render(code, render.JSON{Indented: IsDebugging(), Data: obj})
+	c.Render(code, render.JSON{Indented: true, Data: obj})
 }
 
 // JSON 将给定的结构序列化为JSON并写入(随手设置了Content-Type).
