@@ -2,16 +2,16 @@ package web
 
 import (
 	"fmt"
+	"html/template"
 	"runtime"
 	"strconv"
 	"strings"
-	"text/template"
 )
 
 const webSupportMinGoVer = 10
 
 // IsDebugging 如果是框架运行在调式模式,则返回true.
-// 使用SetMode(gweb.ReleaseMode)禁用调试模式.
+// 使用SetMode(web.ReleaseMode)禁用调试模式.
 func IsDebugging() bool {
 	return webMode == debugCode
 }
@@ -72,13 +72,13 @@ func debugPrintWARNINGDefault() {
 func debugPrintWARNINGNew() {
 	debugPrint(`[WARNING] 当前运行在"debug"模式下. 生产环境中请切换到"release"模式.
  - 使用环境变量(env):	export Web_MODE=release
- - 使用代码:			gweb.SetMode(gweb.ReleaseMode)
+ - 使用代码:			web.SetMode(web.ReleaseMode)
 `)
 }
 
 func debugPrintWARNINGSetHTMLTemplate() {
 	debugPrint(`[WARNING] 由于SetHTMLTemplate()不是线程安全的方法. 所以只能再初始化是调用它.即. 在注册任何路由和监听前:
-	router := gweb.Default()
+	router := web.Default()
 	router.SetHTMLTemplate(template) // << good place
 `)
 }
