@@ -26,3 +26,20 @@ func (d Data) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
+
+// Set set
+func (d Data) set(key string, Obj interface{}) {
+	d[key] = Obj
+}
+
+// Err Data的另一种封装
+func Err(code int, msg string, jsonObj interface{}) Data {
+	data := Data{
+		"code": code,
+		"msg":  msg,
+	}
+	if jsonObj != nil {
+		data.set("data", jsonObj)
+	}
+	return data
+}
